@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Input Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    
+    input, output {
+      padding: 8px;
+      margin-bottom: 10px;
+      width: 200px;
+    }
+    
+    /* label {
+      text-decoration: underline;
+      width: 500px;
+    } */
+  </style>
+</head>
+<body>
+  <h3>Single Password Manager</h3>
+  
+  <label for="masterpassword">Master Password:</label>
+  <input type="password" id="masterpassword" name="masterpassword">
+  <button id="toggle-password-visible">Show password</button>
+  <br>
+  
+  <label for="website">Website:</label>
+  <input type="text" id="website" name="website">
+  <br>
+  
+  <label for="username">Username (optional, recommended):</label>
+  <input type="text" id="username" name="username">
+  <br>
+  
+  <button id="make-password" style="display: none;">Generate Password</button>
+
+  
+  <label for="generated-password">Your password:</label>
+  <output id="generated-password" name="generated-password"></output>
+  <button id="copy-to-clipboard">Copy Password</button>
+  
+  <script src='bundle.js'></script>
+  <script src="uniquePasswordManager.js"></script>
+  <script>
+    // Add event listeners to the input fields
+    var masterPasswordField = document.getElementById('masterpassword');
+    masterPasswordField.addEventListener('input', updateOutput);
+
+    var websiteField = document.getElementById('website');
+    websiteField.addEventListener('input', updateOutput);
+    document.getElementById('username').addEventListener('input', updateOutput);
+
+    var makePasswordButton = document.getElementById('make-password');
+    var generatedPassword = '';
+    var generatedPasswordField = document.getElementById("generated-password");
+    var numTimesGenerated = 0;
+
+    function updateOutput() {
+      // Get the values from the input fields
+      var password = masterPasswordField.value;
+      var website = document.getElementById('website').value;
+      var username = document.getElementById('username').value;
+
+      makePasswordButton.style.display = password.length && website.length
+        ? 'block'
+        : 'none';
+
+      // Concatenate the input values and update the output field
+      // document.getElementById('output').value = input1 + ' ' + input2 + ' ' + input3;
+    }
+
+    makePasswordButton.addEventListener('click', async () => {
+      generatedPassword = await generateFromMasterPassword(masterPasswordField.value, websiteField.value);
+      generatedPasswordField.textContent = generatedPassword;
+    });
+
+    var copyButton = document.getElementById('copy-to-clipboard');
+    var timeoutID;
+
+    copyButton.addEventListener('click', () => {
+      // Use the Clipboard API to write the text to the clipboard
+      navigator.clipboard.writeText(generatedPasswordField.value)
+        .then(() => {
+          if (typeof timeoutID === 'number') clearTimeout(timeoutID);
+          console.log('Text copied to clipboard!');
+          copyButton.style.backgroundColor = 'lightgreen';
+          copyButton.textContent = 'Copied!';
+          timeoutID = setTimeout(() => {
+            copyButton.textContent = 'Copy to Clipboard';
+            copyButton.style.backgroundColor = '';
+          }, 3000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    });
+
+    var showPasswordButton = document.getElementById('toggle-password-visible');
+    showPasswordButton.addEventListener('click', () => {
+      togglePasswordVisibilityAction(masterPasswordField);
+    });
+
+    function togglePasswordVisibilityAction(passwordField) {
+      passwordField.getAttribute('type') === 'password'
+        ? (passwordField.setAttribute('type', 'text'), showPasswordButton.textContent = 'Hide Password')
+        : (passwordField.setAttribute('type', 'password'), showPasswordButton.textContent = 'Show Password');
+    }
+
+  </script>
+</body>
+</html>
