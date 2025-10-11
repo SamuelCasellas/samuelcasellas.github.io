@@ -162,17 +162,28 @@ async function generatePassword(event) {
 }
 
 function retrieveTruncatedWebsite(website) {
+  const domainRegex = /^(net|info|org|com|edu|gov|co|me|io|app|fi|fr|tw)$/i;
   if (!website.trim().length) {
     alert('Please enter a website name.');
     return;
   }
   let parts = website.split('.');
   const domain = parts.at(-1).split('/')[0]; 
-  if (parts.length === 1 || !/(net|info|org|com|edu|gov|co|me|io|app|fi|fr|tw)$/i.test(domain)) {
+  if (parts.length === 1 || !domainRegex.test(domain)) {
     alert('Please enter website with domain ending, like .com or .org.');
     return null;
   }
-  return `${parts.at(-2)}.${domain}`.toLowerCase();
+
+  // e.g. google.com.tw
+  if (domainRegex.test(parts.at(-2))) {
+    if (parts.length == 2) {
+      alert('Please enter a valid website. "website.com" and "website.com.tw" both work.')
+      return null;
+    }
+    return `${parts.at(-3)}.${parts.at(-2)}.${domain}`.toLowerCase();
+  } else {
+    return `${parts.at(-2)}.${domain}`.toLowerCase();
+  }
 }
 
 async function generatePasswordInternal(masterpassword) {
