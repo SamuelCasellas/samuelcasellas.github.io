@@ -2,114 +2,53 @@
 <html>
 <head>
   <title>Text Input Example</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    
-    input, output {
-      padding: 8px;
-      margin-bottom: 10px;
-      width: 200px;
-    }
-    
-    /* label {
-      text-decoration: underline;
-      width: 500px;
-    } */
-  </style>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <h3>Single Password Manager</h3>
   
-  <label for="masterpassword">Master Password:</label>
-  <input type="password" id="masterpassword" name="masterpassword">
-  <button id="toggle-password-visible">Show password</button>
-  <br>
-  
-  <label for="website">Website:</label>
-  <input type="text" id="website" name="website">
-  <br>
-  
-  <label for="username">Username (optional, recommended):</label>
-  <input type="text" id="username" name="username">
-  <br>
-  
-  <button id="make-password" style="display: none;">Generate Password</button>
+  <form onsubmit="generatePassword(event)">
+    <label for="masterpassword">Master Password:</label>
+    <input type="password" id="masterpassword" name="masterpassword">
+    <button id="toggle-master-password-visible" type="button" tabindex="-1">Show Password</button>
+    <canvas id="myCanvas" width="200" height="200" style="position: absolute;"></canvas>
+    <br>
+    
+    <label for="website">Website:</label>
+    <input type="text" id="website" name="website">
+    <br>
+    
+    <label for="username">Username used on site (optional):</label>
+    <input type="text" id="username" name="username">
+    <br>
+    
+    <button id="generate-password">Generate Password</button>
+  </form>
 
   
-  <label for="generated-password">Your password:</label>
-  <output id="generated-password" name="generated-password"></output>
+  <label for="generated-password" id="generated-password-label">Your password:</label>
+  <input type="password" id="generated-password" name="generated-password" readonly></input>
+  <button id="toggle-generated-password-visible">Show Password</button>
+  <button id="regenerate-password" title="Need to change your password? Hit regenerate.">Regenerate Password</button>
+  <label id="num-times-generated">Number times generated: 0</label>
+
+  <br>
+  <button id="clear-password">Clear</button>
   <button id="copy-to-clipboard">Copy Password</button>
+
+  <details class="faq">
+    <summary>Security Tips/Questions</summary>
+    <section class="faq-content">
+      <h4>This website is also an app!</h4>
+      <p>A: You can use the `some()` method in combination with the `toUpperCase()` method to check if any character in the string is uppercase. Here's an example:</p>
+      <p>This will return `false` because there are no uppercase characters in the string.</p>
+      <br>
+      <h4>Q: How to </h4>
+    </section>
+  </details>  
   
-  <script src='bundle.js'></script>
+  <!-- <script src='bundle.js'></script> -->
   <script src="uniquePasswordManager.js"></script>
-  <script>
-    // Add event listeners to the input fields
-    var masterPasswordField = document.getElementById('masterpassword');
-    masterPasswordField.addEventListener('input', updateOutput);
-
-    var websiteField = document.getElementById('website');
-    websiteField.addEventListener('input', updateOutput);
-    document.getElementById('username').addEventListener('input', updateOutput);
-
-    var makePasswordButton = document.getElementById('make-password');
-    var generatedPassword = '';
-    var generatedPasswordField = document.getElementById("generated-password");
-    var numTimesGenerated = 0;
-
-    function updateOutput() {
-      // Get the values from the input fields
-      var password = masterPasswordField.value;
-      var website = document.getElementById('website').value;
-      var username = document.getElementById('username').value;
-
-      makePasswordButton.style.display = password.length && website.length
-        ? 'block'
-        : 'none';
-
-      // Concatenate the input values and update the output field
-      // document.getElementById('output').value = input1 + ' ' + input2 + ' ' + input3;
-    }
-
-    makePasswordButton.addEventListener('click', async () => {
-      generatedPassword = await generateFromMasterPassword(masterPasswordField.value, websiteField.value);
-      generatedPasswordField.textContent = generatedPassword;
-    });
-
-    var copyButton = document.getElementById('copy-to-clipboard');
-    var timeoutID;
-
-    copyButton.addEventListener('click', () => {
-      // Use the Clipboard API to write the text to the clipboard
-      navigator.clipboard.writeText(generatedPasswordField.value)
-        .then(() => {
-          if (typeof timeoutID === 'number') clearTimeout(timeoutID);
-          console.log('Text copied to clipboard!');
-          copyButton.style.backgroundColor = 'lightgreen';
-          copyButton.textContent = 'Copied!';
-          timeoutID = setTimeout(() => {
-            copyButton.textContent = 'Copy to Clipboard';
-            copyButton.style.backgroundColor = '';
-          }, 3000);
-        })
-        .catch(err => {
-          console.error('Failed to copy text: ', err);
-        });
-    });
-
-    var showPasswordButton = document.getElementById('toggle-password-visible');
-    showPasswordButton.addEventListener('click', () => {
-      togglePasswordVisibilityAction(masterPasswordField);
-    });
-
-    function togglePasswordVisibilityAction(passwordField) {
-      passwordField.getAttribute('type') === 'password'
-        ? (passwordField.setAttribute('type', 'text'), showPasswordButton.textContent = 'Hide Password')
-        : (passwordField.setAttribute('type', 'password'), showPasswordButton.textContent = 'Show Password');
-    }
-
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
