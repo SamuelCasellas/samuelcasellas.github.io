@@ -18,5 +18,11 @@ It's an interesting academic idea but in practice I think it introduces more ris
 There have been similar approaches in the past like LessPass and Password Hasher browser extensions that use deterministic generation based on a master key and site name. They never really caught on outside niche user groups because of usability issues and lack of recovery options. Today most people rely on password managers that store encrypted passwords or use hardware-backed passkeys for better balance between security and convenience."
 
 # Requirements:
-- We will enforce that the master key used is at least 12 characters long
+- We will enforce that the master key used is at least 10 characters long
+
+https://thelinuxcode.com/how-to-protect-your-pwa-web-app-security-best-practices/
+
+
+# PWA:
+- Initial setup: https://www.geeksforgeeks.org/javascript/making-a-simple-pwa-under-5-minutes/
 

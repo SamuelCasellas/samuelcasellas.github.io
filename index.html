@@ -3,6 +3,18 @@
 <head>
   <title>Text Input Example</title>
   <link rel="stylesheet" href="styles.css"/>
+  <!-- Manifest File link -->
+  <link rel="manifest" href="manifest.json">
+  <meta http-equiv="Content-Security-Policy" 
+    content="default-src 'self'; 
+      script-src 'self' 'unsafe-inline'; 
+      style-src 'self' 'unsafe-inline';
+      img-src 'self' data:;
+      connect-src 'none';
+      object-src 'none';
+      base-uri 'self';
+      form-action 'none';
+      frame-ancestors 'none';">
 </head>
 <body>
   <h3>Single Password Manager</h3>
@@ -11,7 +23,7 @@
     <label for="masterpassword">Master Password:</label>
     <input type="password" id="masterpassword" name="masterpassword">
     <button id="toggle-master-password-visible" type="button" tabindex="-1">Show Password</button>
-    <canvas id="myCanvas" width="200" height="200" style="position: absolute;"></canvas>
+    <canvas id="myCanvas" width="200" height="200" style="position: absolute;" title="Creating a new website password? Verify the picture made from your master password"></canvas>
     <br>
     
     <label for="website">Website:</label>

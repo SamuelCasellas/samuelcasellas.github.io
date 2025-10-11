@@ -33,7 +33,7 @@ function locateAcceptablePasswordFromChars(chars, passwordLength=12) {
   return null;
 }
 
-async function PBKDF2(masterPassword, salt, iterations=100000/*OWASP recommended minimum*/) {
+async function PBKDF2(masterPassword, salt, iterations=100000/*OWASP recommended minimum*/, returnAll=false, numChars=200) {
   const encoder = new TextEncoder();
   // Convert to Base64 string
   const chars = btoa(String.fromCharCode(...(new Uint8Array(await crypto.subtle.deriveBits(
@@ -50,11 +50,13 @@ async function PBKDF2(masterPassword, salt, iterations=100000/*OWASP recommended
       false,
       ['deriveBits']
     ),
-    1600  // 1600 bits = 200 bytes/characters
+    numChars * 8
   ))))).replace(/\+/g, '!').replace(/\//g, '@').replace(/=/g, '#');
 
-  return locateAcceptablePasswordFromChars(chars) || 
-    await PBKDF2(masterPassword, salt, iterations + totalCharValue(masterPassword) % 10)
+  return returnAll
+    ? chars
+    : locateAcceptablePasswordFromChars(chars) ||
+      await PBKDF2(masterPassword, salt, iterations + totalCharValue(masterPassword) % 10)
 }
 
 const totalCharValue = (str) => Array.from(str).map(c => c.charCodeAt(0)).reduce((acc, curr) => acc + curr, 0);
