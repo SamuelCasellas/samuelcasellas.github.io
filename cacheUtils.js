@@ -4,12 +4,12 @@ class CacheUtil {
     this.precachedResources = [
       'images/icon-192x192.png',
       'images/icon-512x512.png',
+      'uniquePasswordManager.js',
       'cacheUtils.js',
       'externalThreatProtection.js',
       'index.html',
       'script.js',
       'styles.css',
-      'uniquePasswordManager.js'
     ];
   }
 
