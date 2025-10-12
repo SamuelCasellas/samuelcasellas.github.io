@@ -20,6 +20,10 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
   if (cacheUtil.precachedResources.includes(url.pathname)) {
-    event.respondWith(cacheUtil.checkCacheFirst(event.request));
+    event.respondWith(
+      url.pathname.includes('/index.html')  // This will update frequently
+        ? cacheUtil.checkNetworkFirst(event.request)
+        : cacheUtil.checkCacheFirst(event.request)
+    );
   }
 });

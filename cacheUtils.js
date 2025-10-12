@@ -1,5 +1,4 @@
 class CacheUtil {
-  staticCacheName = 2
   get precachedResources() {
     return [
       '/images/icon-192x192.png',
@@ -14,13 +13,26 @@ class CacheUtil {
     ];
   }
 
+  async openCache() {
+    return await caches.open('pwa');
+  }
+
   async precache() {
-    const cache = await caches.open('pwa');
+    const cache = await this.openCache();
     return cache.addAll(this.precachedResources);
   }
 
   async getFromCache(request) {
     return await caches.match(request);
+  }
+
+  async getFromNetwork(request) {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await this.openCache();
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
   }
 
   async checkCacheFirst(request) {
@@ -29,14 +41,18 @@ class CacheUtil {
       return cachedResponse;
     }
     try {
-      const networkResponse = await fetch(request);
-      if (networkResponse.ok) {
-        const cache = await caches.open('pwa');
-        cache.put(request, networkResponse.clone());
-      }
-      return networkResponse;
+      return await this.getFromNetwork(request);
     } catch (error) {
       return Response.error();
+    }
+  }
+
+  async checkNetworkFirst(request) {
+    try {
+      return await this.getFromNetwork(request);
+    } catch (error) {
+      const cachedResponse = await this.getFromCache(request)
+      return cachedResponse || Response.error();
     }
   }
 }
