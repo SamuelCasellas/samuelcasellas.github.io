@@ -7,7 +7,8 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  if (!cacheUtil.precachedResources.find(r => location.origin + r === event.request.url)) {
+  if (!location.origin === event.request.url
+    || !cacheUtil.precachedResources.find(r => location.origin + r === event.request.url)) {
     event.respondWith(
       new Response('Network access disabled', {
         status: 403,
