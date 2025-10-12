@@ -51,7 +51,7 @@ async function PBKDF2(masterPassword, salt, iterations=100000/*OWASP recommended
       ['deriveBits']
     ),
     numChars * 8
-  ))))).replace(/\+/g, '!').replace(/\//g, '@').replace(/=/g, '#');
+  ))))).replace(/\+/g, '#').replace(/\//g, '@').replace(/=/g, '*');
 
   return returnAll
     ? chars
