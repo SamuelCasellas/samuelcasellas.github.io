@@ -7,7 +7,6 @@ class CacheUtil {
       'cacheUtils.js',
       'externalThreatProtection.js',
       'index.html',
-      'localStorageUtils.js',
       'script.js',
       'styles.css',
       'uniquePasswordManager.js'
