@@ -1,20 +1,20 @@
 class CacheUtil {
-  constructor() {
-    this.staticCacheName = 'pwa';
-    this.precachedResources = [
-      'images/icon-192x192.png',
-      'images/icon-512x512.png',
-      'uniquePasswordManager.js',
-      'cacheUtils.js',
-      'externalThreatProtection.js',
-      'index.html',
-      'script.js',
-      'styles.css',
+  staticCacheName = 2
+  get precachedResources() {
+    return [
+      '/images/icon-192x192.png',
+      '/images/icon-512x512.png',
+      '/uniquePasswordManager.js',
+      '/cacheUtils.js',
+      '/externalThreatProtection.js',
+      '/index.html',
+      '/script.js',
+      '/styles.css',
     ];
   }
 
   async precache() {
-    const cache = await caches.open(this.staticCacheName);
+    const cache = await caches.open('pwa');
     return cache.addAll(this.precachedResources);
   }
 
@@ -30,7 +30,7 @@ class CacheUtil {
     try {
       const networkResponse = await fetch(request);
       if (networkResponse.ok) {
-        const cache = await caches.open(this.staticCacheName);
+        const cache = await caches.open('pwa');
         cache.put(request, networkResponse.clone());
       }
       return networkResponse;
