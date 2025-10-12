@@ -8,6 +8,7 @@ class CacheUtil {
       '/cacheUtils.js',
       '/externalThreatProtection.js',
       '/index.html',
+      '/manifest.json',
       '/script.js',
       '/styles.css',
     ];
