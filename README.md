@@ -1,6 +1,8 @@
 # Initial Thoughts
 
-// HEY TODO: YOU NEED A BACKGROUND SCRIPTING SERVER THAT YOUR EXTENSION NEEDS TO INTERACt WITH IF YOU WANT TO IMPLEMENT LIBRARY OF BABEL AS A PASSWORD MANAGER!!!
+~~HEY TODO: YOU NEED A BACKGROUND SCRIPTING SERVER THAT YOUR EXTENSION NEEDS TO INTERACt WITH IF YOU WANT TO IMPLEMENT LIBRARY OF BABEL AS A PASSWORD MANAGER!!!~~
+
+Nope, we are not using the Library of Babel; it is an external dependency.
 
 # Concerns
 ## Grant
@@ -24,5 +26,7 @@ https://thelinuxcode.com/how-to-protect-your-pwa-web-app-security-best-practices
 
 
 # PWA:
-- Initial setup: https://www.geeksforgeeks.org/javascript/making-a-simple-pwa-under-5-minutes/
+- [Initial PWA setup](https://www.geeksforgeeks.org/javascript/making-a-simple-pwa-under-5-minutes/)
+- [PWA Caching](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Caching)
+
 

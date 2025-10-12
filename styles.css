@@ -72,3 +72,18 @@ details[open] summary ~ * {
   0%    {opacity: 0; margin-left: -10px}
   100%  {opacity: 1; margin-left: 0px}
 }
+
+
+@media (max-width: 767px) {
+  /* Styles for mobile devices (screens up to 767px wide) */
+  body {
+    font-size: 16px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  /* Add more mobile-specific styles here */
+}
+

@@ -10,11 +10,19 @@
       script-src 'self' 'unsafe-inline'; 
       style-src 'self' 'unsafe-inline';
       img-src 'self' data:;
-      connect-src 'none';
+      connect-src 'self';
       object-src 'none';
       base-uri 'self';
-      form-action 'none';
-      frame-ancestors 'none';">
+      form-action 'none';">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('serviceworker.js')
+          .then(() => console.log('Registered service worker'))
+          .catch((e) => console.error('Failed to register service worker: ' + e))
+      });
+    }
+  </script>
 </head>
 <body>
   <h3>Single Password Manager</h3>
@@ -27,11 +35,11 @@
     <br>
     
     <label for="website">Website:</label>
-    <input type="text" id="website" name="website">
+    <input type="email" id="website" name="website">
     <br>
     
     <label for="username">Username used on site (optional):</label>
-    <input type="text" id="username" name="username">
+    <input type="email" id="username" name="username">
     <br>
     
     <button id="generate-password">Generate Password</button>
@@ -59,9 +67,11 @@
     </section>
   </details>  
   
-  <!-- <script src='bundle.js'></script> -->
-  <script src="uniquePasswordManager.js"></script>
+  <script src="localStorageUtils.js"></script>
+  <script src="externalThreatProtection.js"></script>
+  <script src="cacheUtils.js"></script>
   <script src="script.js"></script>
   <script src="loadServiceWorker.js"></script>
+  <script src="uniquePasswordManager.js"></script>
 </body>
 </html>

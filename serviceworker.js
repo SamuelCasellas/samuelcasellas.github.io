@@ -1,19 +1,23 @@
-var staticCacheName = "pwa";
+importScripts('cacheUtils.js');
+const cacheUtil = new CacheUtil();
 
-self.addEventListener("install", function (e) {
-  e.waitUntil(
-    caches.open(staticCacheName).then(function (cache) {
-      return cache.addAll(["/"]);
-    })
-  );
+self.addEventListener('install', (event) => {
+  // precache calls fetch internally with addAll
+  event.waitUntil(cacheUtil.precache());
 });
 
-self.addEventListener("fetch", function (event) {
-  console.log(event.request.url);
+self.addEventListener('fetch', (event) => {
+  if (!event.request.url.includes(location.origin)) {
+    event.respondWith(
+      new Response('Network access disabled', {
+        status: 403,
+        statusText: 'Offline Mode - No External Access'
+      })
+    );
+  }
 
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      return response || fetch(event.request);
-    })
-  );
+  const url = new URL(event.request.url);
+  if (cacheUtil.precachedResources.includes(url.pathname)) {
+    event.respondWith(cacheUtil.checkCacheFirst(event.request));
+  }
 });
