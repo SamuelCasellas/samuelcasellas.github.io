@@ -2,12 +2,12 @@ importScripts('cacheUtils.js');
 const cacheUtil = new CacheUtil();
 
 self.addEventListener('install', (event) => {
-  // precache calls fetch internally with addAll
+  // precache calls fetch internally with addAll inside precache
   event.waitUntil(cacheUtil.precache());
 });
 
 self.addEventListener('fetch', (event) => {
-  if (!location.origin === event.request.url
+  if (location.origin !== event.request.url
     && !cacheUtil.precachedResources.find(r => location.origin + r === event.request.url)) {
     event.respondWith(
       new Response('Network access disabled', {
@@ -21,7 +21,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (cacheUtil.precachedResources.includes(url.pathname)) {
     event.respondWith(
-      url.pathname.includes('/index.html')  // This will update frequently
+      true || ['/index.html', '/script.js'].find(u => url.pathname.includes(u))  // This will update frequently
         ? cacheUtil.checkNetworkFirst(event.request)
         : cacheUtil.checkCacheFirst(event.request)
     );

@@ -3,6 +3,7 @@ class CacheUtil {
     return [
       '/images/icon-192x192.png',
       '/images/icon-512x512.png',
+      '/storageUtils.js',
       '/uniquePasswordManager.js',
       '/cacheUtils.js',
       '/externalThreatProtection.js',

@@ -1,4 +1,5 @@
-const requiredCharSet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz', '0123456789', '!@#'];
+const requiredCharSet = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz', '0123456789', '@#*'];
+const alphabetChars = requiredCharSet[0].concat(requiredCharSet[1]);
 const passwordIsAcceptable = (password) => !requiredCharSet.find(chars => !new Set([...chars].filter(c => password.indexOf(c) !== -1)).size);
 
 

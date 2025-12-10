@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>1 Pass</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css" />
   <!-- Manifest File link -->
   <link rel="manifest" href="manifest.json">
-  <meta http-equiv="Content-Security-Policy" 
-    content="default-src 'self'; 
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
       script-src 'self' 'unsafe-inline'; 
       style-src 'self' 'unsafe-inline';
       img-src 'self' data:;
@@ -14,6 +14,7 @@
       object-src 'none';
       base-uri 'self';
       form-action 'none';">
+  <!-- Service worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -23,54 +24,67 @@
       });
     }
   </script>
+  <script src="storageUtils.js" defer></script>
+  <script src="uniquePasswordManager.js" defer></script>
+  <script src="externalThreatProtection.js" defer></script>
+  <script src="cacheUtils.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="loadServiceWorker.js" defer></script>
 </head>
+
 <body>
   <h3>Single Password Manager</h3>
-  
-  <form onsubmit="generatePassword(event)">
+
+  <form id="password-form" novalidate>
     <label for="masterpassword">Master Password:</label>
     <input type="password" id="masterpassword" name="masterpassword">
     <button id="toggle-master-password-visible" type="button" tabindex="-1">Show Password</button>
-    <canvas id="myCanvas" width="200" height="200" style="position: absolute;" title="Creating a new website password? Verify the picture made from your master password"></canvas>
+    <canvas id="myCanvas" width="200" height="200" style="position: absolute;"
+      title="Creating a new website password? Verify the picture made from your master password"></canvas>
     <br>
-    
+
     <label for="website">Website:</label>
     <input type="email" id="website" name="website">
     <br>
-    
+
     <label for="username">Username used on site (optional):</label>
     <input type="email" id="username" name="username">
     <br>
-    
-    <button id="generate-password">Generate Password</button>
-  </form>
 
-  
+    <button id="generate-password">Generate Password</button>
+    <label for="generate-username-action" id="generate-username-label">Generate username</label>
+    <input id="generate-username-action" type="checkbox" aria-selected="false" style="width: auto !important;">
+    <button id="selected-username-option" type="button"></button>
+  </form>
+  <br>
+
+  <label for="generated-username" id="generated-username-label">Your username:</label>
+  <input type="text" id="generated-username" name="generated-username" readonly></input>
+  <button id="copy-username-to-clipboard">Copy Username</button>
+  <br>
+
   <label for="generated-password" id="generated-password-label">Your password:</label>
   <input type="password" id="generated-password" name="generated-password" readonly></input>
   <button id="toggle-generated-password-visible">Show Password</button>
-  <button id="regenerate-password" title="Need to change your password? Hit regenerate.">Regenerate Password</button>
-  <label id="num-times-generated">Number times generated: 0</label>
+  <button id="copy-password-to-clipboard">Copy Password</button>
+  <button id="regenerate-password" title="Need to change your password? Hit regenerate.">Regenerate Password (1)</button>
+
+  <br>
 
   <br>
   <button id="clear-password">Clear</button>
-  <button id="copy-to-clipboard">Copy Password</button>
 
-  <details class="faq">
+  <!-- <details class="faq">
     <summary>Security Tips/Questions</summary>
     <section class="faq-content">
       <h4>This website is also an app!</h4>
-      <p>A: You can use the `some()` method in combination with the `toUpperCase()` method to check if any character in the string is uppercase. Here's an example:</p>
+      <p>A: You can use the `some()` method in combination with the `toUpperCase()` method to check if any character in
+        the string is uppercase. Here's an example:</p>
       <p>This will return `false` because there are no uppercase characters in the string.</p>
       <br>
       <h4>Q: How to </h4>
     </section>
-  </details>  
-
-  <script src="uniquePasswordManager.js"></script>
-  <script src="externalThreatProtection.js"></script>
-  <script src="cacheUtils.js"></script>
-  <script src="script.js"></script>
-  <script src="loadServiceWorker.js"></script>
+  </details> -->
 </body>
+
 </html>
