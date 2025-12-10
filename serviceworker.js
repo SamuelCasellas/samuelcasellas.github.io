@@ -21,9 +21,9 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (cacheUtil.precachedResources.includes(url.pathname)) {
     event.respondWith(
-      true || ['/index.html', '/script.js'].find(u => url.pathname.includes(u))  // This will update frequently
+      /* ['/index.html', '/script.js'].find(u => url.pathname.includes(u))  // This will update frequently
         ? cacheUtil.checkNetworkFirst(event.request)
-        : cacheUtil.checkCacheFirst(event.request)
+        : */ cacheUtil.checkCacheFirst(event.request)
     );
   }
 });
