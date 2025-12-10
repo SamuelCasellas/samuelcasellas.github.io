@@ -296,7 +296,7 @@
 
   clearButton.addEventListener('click', async() => {
     // Don't clear something else the user may have copied to their clipboard
-    if ([generatedPasswordField.value, generatedUsernameField.value].includes(await navigator.clipboard.read())) {
+    if ([generatedPasswordField.value, generatedUsernameField.value].includes(await navigator.clipboard.readText())) {
       navigator.clipboard.writeText('').then(() => {
         console.log('Cleared the clipboard.')
       }).catch(err => {
