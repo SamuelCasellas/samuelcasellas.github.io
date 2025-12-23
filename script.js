@@ -289,20 +289,33 @@
   });
 
   function init() {
+    // Initialize the idle timer
+    resetIdleTimeout();
     hideAll(generatedPasswordLabel, generatedPasswordField,
       showGeneratedPasswordButton, regeneratePasswordButton, generatedUsernameLabel,
       generatedUsernameField, selectedUsernameOptionButton, passwordCopyButton, usernameCopyButton);
   }
 
-  clearButton.addEventListener('click', async() => {
+  async function clearClipboard() {
+    // user may not be focused on the screen at this moment
     // Don't clear something else the user may have copied to their clipboard
-    if ([generatedPasswordField.value, generatedUsernameField.value].includes(await navigator.clipboard.readText())) {
-      navigator.clipboard.writeText('').then(() => {
-        console.log('Cleared the clipboard.')
-      }).catch(err => {
-        console.error('Failed to clear the clipboard: ' + err);
-      });
-    }
+    try {
+      if ([masterPasswordField.value,
+        websiteField.value,
+        usernameField.value,
+        generatedPasswordField.value,
+        generatedUsernameField.value].includes(await navigator.clipboard.readText())) {
+        navigator.clipboard.writeText('').then(() => {
+          console.log('Cleared the clipboard.')
+        }).catch(err => {
+          console.error('Failed to clear the clipboard: ' + err);
+        });
+      }
+    } catch {}
+  }
+
+  async function clearAllData() {
+    await clearClipboard();
 
     clearCanvas();
     numTimesGenerated = 0;
@@ -311,7 +324,9 @@
       passwordCopyButton, usernameCopyButton, selectedUsernameOptionButton,
       generatedUsernameLabel, generatedUsernameField,
       generatedPasswordLabel, generatedPasswordField);
-  });
+  }
+
+  clearButton.addEventListener('click', clearAllData);
 
   passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault();  // prevent form submission
@@ -324,8 +339,10 @@
     }
   });
 
-  regeneratePasswordButton.addEventListener('click', () => {
-    generatePasswordInternal(generatedPasswordField.value);
+  regeneratePasswordButton.addEventListener('click', async() => {
+    regeneratePasswordButton.disabled = true;
+    await generatePasswordInternal(generatedPasswordField.value);
+    regeneratePasswordButton.disabled = false;
   })
 
   function retrieveTruncatedWebsite() {
@@ -404,6 +421,33 @@
       ? (passwordField.setAttribute('type', 'text'), passwordButton.textContent = 'Hide Password')
       : (passwordField.setAttribute('type', 'password'), passwordButton.textContent = 'Show Password');
   }
+
+  let idleTimeout;
+  let clearedScreen = false;
+
+  function resetIdleTimeout() {
+    // Clear any existing timeout
+    if (clearedScreen) {
+      alert("The screen has been reset due to inactivity.");
+      clearClipboard();
+      clearedScreen = false;
+    }
+    clearTimeout(idleTimeout);
+
+    // Set a new timeout to trigger screen clearing after 10 minutes of inactivity
+    if (!masterPasswordField.value) return;
+    idleTimeout = setTimeout(() => {
+      if (!masterPasswordField.value) return;
+
+      clearAllData();
+      clearedScreen = true;
+    }, 1000 * 60 * 10); // 10 minutes
+  }
+
+  // Add event listeners for user activity
+  document.addEventListener('mousemove', resetIdleTimeout);
+  document.addEventListener('keydown', resetIdleTimeout);
+  document.addEventListener('click', resetIdleTimeout);
 
   init();
 })();
